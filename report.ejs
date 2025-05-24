@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Expense Report</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Expense Report</h1>
+
+    <ul class="report-list">
+      <% expenses.forEach(exp => { %>
+        <li><%= exp.description %>: $<%= exp.amount.toFixed(2) %></li>
+      <% }) %>
+    </ul>
+
+    <h2>Total: $<%= total.toFixed(2) %></h2>
+
+    <a href="/" class="back-link">Back to Tracker</a>
+  </div>
+</body>
+</html>

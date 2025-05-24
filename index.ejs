@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Expense Tracker</h1>
+    
+    <form action="/add" method="POST" class="form">
+      <input name="description" placeholder="Description" required>
+      <input name="amount" type="number" step="0.01" placeholder="Amount" required>
+      <button type="submit">Add</button>
+    </form>
+
+    <ul class="expense-list">
+      <% expenses.forEach(exp => { %>
+        <li>
+          <span><%= exp.description %>: $<%= exp.amount.toFixed(2) %></span>
+          <form action="/update/<%= exp.id %>" method="POST">
+            <input name="description" value="<%= exp.description %>" required>
+            <input name="amount" type="number" step="0.01" value="<%= exp.amount %>" required>
+            <button>Update</button>
+          </form>
+          <form action="/delete/<%= exp.id %>" method="POST">
+            <button class="delete">Delete</button>
+          </form>
+        </li>
+      <% }) %>
+    </ul>
+
+    <canvas id="chart"></canvas>
+
+    <a href="/report" class="report-link">View Full Report</a>
+  </div>
+
+  <script>
+    const expenses = <%- JSON.stringify(expenses) %>;
+    const ctx = document.getElementById('chart').getContext('2d');
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: expenses.map(e => e.description),
+        datasets: [{
+          label: 'Expense Breakdown',
+          data: expenses.map(e => e.amount),
+          backgroundColor: [
+            '#007bff', '#28a745', '#ffc107', '#dc3545', '#6f42c1', '#fd7e14'
+          ]
+        }]
+      }
+    });
+  </script>
+</body>
+</html>
